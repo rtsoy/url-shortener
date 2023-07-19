@@ -6,7 +6,10 @@ import (
 	"os"
 )
 
-var ctx = context.Background()
+var (
+	Ctx      = context.Background()
+	NotFound = redis.Nil
+)
 
 func CreateClient(dbNo int) *redis.Client {
 	clientOptions := &redis.Options{
