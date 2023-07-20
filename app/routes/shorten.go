@@ -95,7 +95,7 @@ func ShortenURL(c *fiber.Ctx) error {
 		body.Expiry = 24
 	}
 
-	if err := r.Set(redis.Ctx, id, body.URL, body.Expiry*time.Hour); err != nil {
+	if err := r.Set(redis.Ctx, id, body.URL, body.Expiry*time.Hour); err.Err() != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Internal Server Error",
 		})
@@ -109,7 +109,7 @@ func ShortenURL(c *fiber.Ctx) error {
 		XRateLimitReset: 30,
 	}
 
-	r.Decr(redis.Ctx, c.IP())
+	r1.Decr(redis.Ctx, c.IP())
 
 	rateRemainingStr, _ := r1.Get(redis.Ctx, c.IP()).Result()
 	resp.XRateRemaining, _ = strconv.Atoi(rateRemainingStr)
