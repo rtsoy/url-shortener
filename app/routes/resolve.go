@@ -11,6 +11,7 @@ func ResolveURL(c *fiber.Ctx) error {
 	url := c.Params("url")
 
 	r := redis.CreateClient(0)
+	defer r.Close()
 
 	// Query to find original URL
 	value, err := r.Get(redis.Ctx, url).Result()
